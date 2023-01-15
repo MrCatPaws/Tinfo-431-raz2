@@ -27,16 +27,20 @@ namespace ContosoUniversity.Pages.Students
             {
                 return NotFound();
             }
-
-            var student = await _context.Student.FirstOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            
+            //jag9-raz1
+            //following code will read enrollment data when a student is selected
+            // the Include and ThenInclude methods load the Enrollments navigation property
+            Student = await _context.Students
+                .Include(s => s.Enrollments)
+                .ThenInclude(e => e.Course)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (Student == null)
             {
                 return NotFound();
             }
-            else 
-            {
-                Student = student;
-            }
+       
             return Page();
         }
     }
